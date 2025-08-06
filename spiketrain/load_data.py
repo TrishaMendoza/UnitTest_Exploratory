@@ -11,8 +11,8 @@ with h5py.File(file_path + "bGround_Truth_data_10trials_100stims_180000ms.hdf5",
     trial = f['trial_0']
 
     # Extract Spike Train Data
-    row_indices = [5,7,9]
-    spike_train_true = trial['data'][:,row_indices]
+    row_indices = [1, 3, 5, 7, 9]
+    spike_train_true = np.transpose(trial['data'][:,row_indices])
 
 # Load the predicted incorrect data
 with h5py.File(file_path + "bNeuron_B_NotConnectedto_NeuronD_10trials_100stims_180000ms.hdf5", "r") as f:
@@ -21,8 +21,8 @@ with h5py.File(file_path + "bNeuron_B_NotConnectedto_NeuronD_10trials_100stims_1
     trial = f['trial_0']
 
     # Extract Spike Train Data
-    row_indices = [5,7,9]
-    spike_train_predicted = trial['data'][:,row_indices]
+    row_indices = [1, 3, 5, 7, 9]
+    spike_train_predicted = np.transpose(trial['data'][:,row_indices])
 
 
 
