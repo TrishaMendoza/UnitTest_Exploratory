@@ -22,6 +22,9 @@ def spike_rate_analysis(spike_train,
         2. Fano Factor: calculating the fano factor from the spike rate
 
     """
+    # Ensure it is a 2D input for uniform calculations
+    if spike_train.ndim == 1:
+        spike_train = np.atleast_2d(spike_train)
 
     # Convert time to samples 
     bin_size_samples = int( (bin_size_ms / 1000) * sample_rate_hz)

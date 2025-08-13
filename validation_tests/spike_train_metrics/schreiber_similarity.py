@@ -22,6 +22,13 @@ def schreiber_similarity_analysis(spike_train_a, spike_train_b, sample_rate_hz, 
     if spike_train_a.shape != spike_train_b.shape:
         raise ValueError("Spike matrices trains must be the same length")
 
+    # Ensure it is a 2D input for uniform calculations
+    if spike_train_a.ndim == 1:
+        spike_train_a = np.atleast_2d(spike_train_a)
+    if spike_train_b.ndim == 1:
+        spike_train_b = np.atleast_2d(spike_train_b)
+
+
     # Change ms into s
     sigma = sigma_ms / 1000
     dt = 1 / sample_rate_hz 

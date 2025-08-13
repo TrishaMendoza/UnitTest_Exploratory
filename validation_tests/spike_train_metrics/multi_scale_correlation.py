@@ -20,10 +20,9 @@ def run_multiscale_correlation_analysis(spike_train_matrix_a, spike_train_matrix
     # Check if the spike trains are the same length
     if spike_train_matrix_a.shape != spike_train_matrix_b.shape:
         raise ValueError("Spike matrices trains must be the same length")
-    
 
     # Check if we recieved a vector or a matrix
-    if spike_train_matrix_a.shape[0] > 1:
+    if spike_train_matrix_a.ndim > 1:
 
         # Prepare the correlation storage 
         correlation_results = []

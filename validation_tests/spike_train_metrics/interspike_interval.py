@@ -15,6 +15,9 @@ def interspike_interval_analysis(spike_train, sample_rate_hz):
         2. coefficient of variation: coefficient of variation (variability of spike timings)
 
     """
+    # Ensure it is a 2D input for uniform calculations
+    if spike_train.ndim == 1:
+        spike_train = np.atleast_2d(spike_train)
 
     # Develop a time vector in [ms] 
     n_samples = spike_train.shape[1]

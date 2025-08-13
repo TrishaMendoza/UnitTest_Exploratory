@@ -2,13 +2,14 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import pickle
 
-from metrics.spike_rate import spike_rate_analysis
-from metrics.interspike_interval import interspike_interval_analysis
-from metrics.schreiber_similarity import schreiber_similarity_analysis
-from metrics.van_rossum import van_rossum_distance_analysis
-from metrics.multi_scale_correlation import run_multiscale_correlation_analysis
-from metrics.granger_causality import granger_causality_analysis
+from spike_train_metrics.spike_rate import spike_rate_analysis
+from spike_train_metrics.interspike_interval import interspike_interval_analysis
+from spike_train_metrics.schreiber_similarity import schreiber_similarity_analysis
+from spike_train_metrics.van_rossum import van_rossum_distance_analysis
+from spike_train_metrics.multi_scale_correlation import run_multiscale_correlation_analysis
+from spike_train_metrics.granger_causality import granger_causality_analysis
 
 from load_data import spike_train_true, spike_train_predicted
 
@@ -45,6 +46,11 @@ ff_df = pd.DataFrame({
 })
 print(ff_df)
 
+ff_df.to_csv("fano_factor.csv", index=False)
+pd.DataFrame(spike_rate_true).to_csv("spike_rate_true.csv", index=False)
+pd.DataFrame(spike_rate_predicted).to_csv("spike_rate_predicted.csv", index=False)
+
+
 # Plotting spike train results
 #for neuron_id in range(n_neurons+1):
 #    plt.subplot(2, 3, neuron_id + 1)
@@ -70,6 +76,10 @@ cv_df = pd.DataFrame({
     'Type' : ['True'] * n_neurons + ['Predicted'] * n_neurons
 })
 
+cv_df.to_csv("coefficient_variation.csv", index=False)
+pd.DataFrame(interspike_true).to_csv("interspike_interval_true.csv", index=False)
+pd.DataFrame(interspike_pred).to_csv("interspike_interval_predicted.csv", index=False)
+
 # Plotting spike train results
 #for neuron_id in range(n_neurons+1):
     #plt.subplot(2, 3, neuron_id + 1)
@@ -93,6 +103,9 @@ schreiber_df = pd.DataFrame({
 })
 print(schreiber_df)
 
+schreiber_df.to_csv("schreiber_similarity.csv", index=False)
+
+
 # ----------------------------------------------------------------------------------------------
 # 4. Van Rossum
 van_rossum_vals = van_rossum_distance_analysis(spike_train_true, spike_train_predicted, sample_rate, tau_ms = 10)
@@ -102,6 +115,8 @@ van_rossum_df = pd.DataFrame({
     'Neuron' : neuron_labels,
     'VR Distance' : van_rossum_vals.flatten()
 })
+van_rossum_df.to_csv("van_rossum_distance.csv", index=False)
+
 
 # Plot Similarity Metrics
 #plt.subplot(1,2,1)
@@ -116,7 +131,9 @@ van_rossum_df = pd.DataFrame({
 # ----------------------------------------------------------------------------------------------
 # 5. Multi Scale Correlation
 correlation_results, sigma_vals = run_multiscale_correlation_analysis(spike_train_true, spike_train_predicted, sample_rate)
-print(correlation_results)
+correlation_results.append(sigma_vals)
+pd.DataFrame(correlation_results).to_csv("correlation_results.csv", index=False)
+
 
 #for neuron_id in range(n_neurons):
 #    plt.subplot(2, 3, neuron_id + 1)
@@ -129,14 +146,33 @@ print(correlation_results)
 
 # ----------------------------------------------------------------------------------------------
 # 6. Granger Causality
-#granger_lag_true, granger_ftest_true, granger_pval_true = granger_causality_analysis(spike_train_true, sample_rate, max_lag = 10, bin_size_ms = 5)
-#granger_lag_pred, granger_ftest_pred, granger_pval_pred = granger_causality_analysis(spike_train_predicted, sample_rate, max_lag = 10, bin_size_ms = 5)
+granger_lag_true, granger_ftest_true, granger_pval_true = granger_causality_analysis(spike_train_true, sample_rate, max_lag = 10, bin_size_ms = 5)
+granger_lag_pred, granger_ftest_pred, granger_pval_pred = granger_causality_analysis(spike_train_predicted, sample_rate, max_lag = 10, bin_size_ms = 5)
 
 # Create DataFrame with labels
-#df = pd.DataFrame(granger_lag_true, index = neuron_labels, columns = neuron_labels)
-#sns.heatmap(df, annot=True, cmap='YlGnBu')
-#plt.title('Granger Causality Lag')
-#plt.show()
+granger_lag_true_df = pd.DataFrame(granger_lag_true, index = neuron_labels, columns = neuron_labels)
+granger_lag_pred_df = pd.DataFrame(granger_lag_pred, index = neuron_labels, columns = neuron_labels)
+
+ftest_true_df = pd.DataFrame(granger_ftest_true, index = neuron_labels, columns = neuron_labels)
+ftest_pred_df = pd.DataFrame(granger_ftest_pred, index = neuron_labels, columns = neuron_labels)
+
+pval_true_df = pd.DataFrame(granger_pval_true, index = neuron_labels, columns = neuron_labels)
+pval_pred_df = pd.DataFrame(granger_pval_pred, index = neuron_labels, columns = neuron_labels)
+
+
+# Save to a CSV file
+granger_lag_true_df.to_csv("granger_lag_true.csv", index=False)
+granger_lag_pred_df.to_csv("granger_lag_predicted.csv", index=False)
+
+ftest_true_df.to_csv("granger_ftest_true.csv", index=False)
+ftest_pred_df.to_csv("granger_ftest_predicted.csv", index=False)
+
+pval_true_df.to_csv("granger_pval_true.csv", index=False)
+pval_pred_df.to_csv("granger_pval_predicted.csv", index=False)
+
+
+
+
 
   
 
