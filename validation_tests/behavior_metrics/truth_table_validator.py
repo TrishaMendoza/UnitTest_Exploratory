@@ -86,10 +86,19 @@ def identify_behaviour_patterns(truth_table_df, input_spike_train, output_spike_
     totals = performance_df[['TP', 'FN', 'TN', 'FP']].sum()
     totals['InputPattern'] = 'Total'
     totals['Accuracy'] = (totals['TN'] + totals['TP']) / (totals['TN'] + totals['TP'] + totals['FP'] + totals['FN'])
-    totals['Sensitivity'] = totals['TP'] / (totals['TP'] + totals['FN'])
-    totals['Specificity'] = totals['TN']  / (totals['TN'] + totals['FP'])
-    performance_df = pd.concat([ performance_df, totals.to_frame().T], ignore_index=True)
 
+    # Checking for potential errors
+    if totals['TP'] + totals['FN'] != 0:
+        totals['Sensitivity'] = totals['TP'] / (totals['TP'] + totals['FN'])
+    else:
+        totals['Sensitivity'] = np.nan
+
+    if totals['TN'] + totals['FP'] != 0:
+        totals['Specificity'] = totals['TN']  / (totals['TN'] + totals['FP'])
+    else:
+        totals['Specificity'] = np.nan
+
+    performance_df = pd.concat([ performance_df, totals.to_frame().T], ignore_index=True)
     return performance_df
 
 

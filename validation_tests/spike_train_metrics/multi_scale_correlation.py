@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from scipy.signal import convolve
 
 # ----------------------------- prepare the data for analysis -------------------------------------
@@ -21,6 +22,9 @@ def run_multiscale_correlation_analysis(spike_train_matrix_a, spike_train_matrix
     if spike_train_matrix_a.shape != spike_train_matrix_b.shape:
         raise ValueError("Spike matrices trains must be the same length")
 
+    correlation_results = []
+    correlation_status = []
+        
     # Check if we recieved a vector or a matrix
     if spike_train_matrix_a.ndim > 1:
 
@@ -36,12 +40,35 @@ def run_multiscale_correlation_analysis(spike_train_matrix_a, spike_train_matrix
             # Run Correlation Analysis
             temp_corr, sigma_vals = multi_scale_correlation(train_a, train_b, sample_rate_hz)
             correlation_results.append(temp_corr)
+
+            # Check pass or fail
+            if np.mean(correlation_results) > 0.9:
+                status = 'pass'
+            else:
+                status = 'fail'
+
+            # Store the final value 
+            correlation_status.append({'Neuron': f"Neuron {neuron_id+1}",
+            'AvgCorrelation': np.mean(correlation_results),
+            'Pass / Fail': status})
     else:
 
         # If there is only a vector provided
         correlation_results, sigma_vals = multi_scale_correlation(spike_train_matrix_a, spike_train_matrix_b, sample_rate_hz)
+        
+        # Check pass or fail
+        if np.mean(correlation_results) > 0.9:
+            status = 'pass'
+        else:
+            status = 'fail'
+
+        # Store the final value 
+        correlation_status.append({'Neuron': f"Neuron 1",
+        'AvgCorrelation': np.mean(correlation_results),
+        'Pass / Fail': status})
     
-    return correlation_results, sigma_vals
+    correlation_status_df = pd.DataFrame(correlation_status)
+    return correlation_status_df,correlation_results, sigma_vals
         
 
 # ----------------------------- run multi scale correlation -------------------------------------

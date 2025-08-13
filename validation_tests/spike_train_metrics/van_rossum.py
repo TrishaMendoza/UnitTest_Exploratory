@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from scipy.signal import convolve
 
 
@@ -42,7 +43,7 @@ def van_rossum_distance_analysis(spike_train_a, spike_train_b, sample_rate_hz, t
 
     # Begin Convolving the different spike trains 
     n_neurons = spike_train_a.shape[0]
-    van_rossum_dist = np.zeros(n_neurons)
+    van_rossum_dist = []
 
     for indx in range(n_neurons):
 
@@ -58,6 +59,15 @@ def van_rossum_distance_analysis(spike_train_a, spike_train_b, sample_rate_hz, t
         van_rossum_squared = (dt/tau) * np.sum((convolve_train_a - convolve_train_b)**2)
 
         # Store the final value 
-        van_rossum_dist[indx] = np.sqrt(van_rossum_squared)
+        if np.sqrt(van_rossum_squared) < 2:
+            status = 'pass'
+        else:
+            status = 'fail'
 
-    return van_rossum_dist
+        # Store the final value 
+        van_rossum_dist.append({'Neuron': f"Neuron {indx+1}",
+        'VRDistance': np.sqrt(van_rossum_squared),
+        'Pass / Fail': status})
+
+    van_rossum_dist_df = pd.DataFrame(van_rossum_dist)
+    return van_rossum_dist_df

@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from scipy.signal import convolve
 
 
@@ -43,7 +44,7 @@ def schreiber_similarity_analysis(spike_train_a, spike_train_b, sample_rate_hz, 
 
     # Begin Convolving the different spike trains 
     n_neurons = spike_train_a.shape[0]
-    schreiber_sim = np.zeros(n_neurons)
+    schreiber_sim = []
 
     for indx in range(n_neurons):
 
@@ -59,8 +60,17 @@ def schreiber_similarity_analysis(spike_train_a, spike_train_b, sample_rate_hz, 
         numerator_val = np.mean(convolve_train_a * convolve_train_b)
         denominator_val = np.sqrt(np.mean(convolve_train_a * convolve_train_a) * np.mean(convolve_train_b * convolve_train_b))
 
-        # Store the final value 
-        schreiber_sim[indx] = numerator_val / denominator_val
+        if numerator_val / denominator_val > 0.8:
+            status = 'pass'
+        else:
+            status = 'fail'
 
-    return schreiber_sim
+        # Store the final value 
+        schreiber_sim.append({'Neuron': f"Neuron {indx+1}",
+        'SchreiberSimilarity': numerator_val / denominator_val,
+        'Pass / Fail': status})
+
+    
+    schreiber_sim_df = pd.DataFrame(schreiber_sim)
+    return schreiber_sim_df
 
