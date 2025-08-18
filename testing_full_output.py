@@ -127,26 +127,14 @@ print(correlation_results_df)
 #plt.show()
 
 # ------------------------- Section just for behaviour testing the function -----------------
-spike_train_input = np.array([
-    [1,1,1,0,0,0,0,1,1,0,1],
-    [1,0,0,0,0,1,0,0,1,1,0]
- ])
-
-spike_train_output = np.array([
-    [0,1,1,1,0,0,0,1,0,1,1]
- ])
-
-# Above is for testing the function
+# Truth Table with Expected Input and Expected Output
 test_truth_table_df = pd.DataFrame({
     "Input A": [1,1,0],
     "Input B": [0,1,1],
     "Ouput C": [1,0,1],
-}
-)
+})
 performance_df = identify_behaviour_patterns(test_truth_table_df, spike_train_predicted[:1,:], spike_train_predicted[4,:])
 print(performance_df)
-
-
 
 # ----------------------------------------------------------------------------------------------
 # 6. Granger Causality
