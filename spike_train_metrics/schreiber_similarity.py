@@ -10,13 +10,13 @@ def schreiber_similarity_analysis(spike_train_a, spike_train_b, sample_rate_hz, 
     schrieber similarity between neurons - tells you how similar the two spike trains are 
 
     Input:
-        1. spike_train_a:
-        2. spike_train_b:
-        3. sample_rate_hz:
-        4. sigma_ms: 
+        1. spike_train_a: matrix of spike trains [neurons, sample points]
+        2. spike_train_b: matrix of spike trains [neurons, sample points]
+        3. sample_rate_hz: sampling frequency
+        4. sigma_ms: controls the width of the guassian (typicall 10-50 ms)
     
     Ouput:
-        1. schrieber_sim:
+        1. schrieber_sim: ouputs the schrieber similarity values between the spike trains
 
     """
     # Check if the spike trains are the same length

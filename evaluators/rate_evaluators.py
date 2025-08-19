@@ -14,6 +14,19 @@ def is_1d(data):
 
 def compute_comparisons (data_true, data_predicted):
 
+    """
+    Compute Comparisons:
+    Used to compare the spike rates and interspike interval distributions. Using a KS- test and Mann-Whitney U test
+    A low p-value will indicate failure as the distributions do not match the ground truth
+
+    Input:
+    1. data_true: list or matrix array of the spike rate or interspike interval for various neurons [ neurons, rate values]
+    2. data_predicted: list or matrix array of the spike rate or interspike interval for various neurons [ neurons, rate values]
+
+    Output:
+    1. summary_statistics_df: data frame with the finalized statistics containing pass or fail for each
+    """
+
     summary_statistics =[]
 
     # ------------------ Single Channel ------------------------------
