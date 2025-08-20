@@ -1,4 +1,3 @@
-
 def structure_prompt(structure_df, locations, prompt):
     """
     Structure Prompt:
@@ -12,7 +11,7 @@ def structure_prompt(structure_df, locations, prompt):
         3. prompt: the corresponding prompt indicating the issue 
 
     Output
-        1. 
+        1. prompts: list of neuron connections that have problem
     """
 
     # Append all possible prompts
