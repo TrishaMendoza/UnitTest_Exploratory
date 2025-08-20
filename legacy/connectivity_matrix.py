@@ -26,15 +26,16 @@ data_predicted = [[0, 0, 1, 0, 0],
                   [0, 0, -0.8, 1, 0]]
 
 connectivity_true_df = pd.DataFrame(data_truth, 
-    index=["Output NeuronA", "Output NeuronB", "Output NeuronC", "Output NeuronD", "OutputNeuronE"],
+    index=["Output NeuronA", "Output NeuronB", "Output NeuronC", "Output NeuronD", "Output NeuronE"],
     columns=["Input NeuronA", "Input NeuronB", "Input NeuronC", "Input NeuronD", "Input NeuronE"]) # column labels
 
 connectivity_predicted_df = pd.DataFrame(data_predicted, 
-    index=["Output NeuronA", "Output NeuronB", "Output NeuronC", "Output NeuronD", "OutputNeuronE"],
+    index=["Output NeuronA", "Output NeuronB", "Output NeuronC", "Output NeuronD", "Output NeuronE"],
     columns=["Input NeuronA", "Input NeuronB", "Input NeuronC", "Input NeuronD", "Input NeuronE"]) # column labels
 
 # ---------------------------------------------------------------------------------------------
 # ----------------------------Simple Function for ouput prompt---------------------------------
+
 def identify_inconsistencies(logical_df, locations, prompt):
     for row_idx, col_idx in locations:
         row_label = logical_df.index[row_idx]

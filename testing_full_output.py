@@ -12,10 +12,37 @@ from spike_train_metrics.multi_scale_correlation import run_multiscale_correlati
 from spike_train_metrics.granger_causality import granger_causality_analysis
 from behavior_metrics.truth_table_validator import identify_behaviour_patterns
 from evaluators.rate_evaluators import compute_comparisons
-
+from structure_evaluator.connectivity_evaluator import structure_analysis
 from load_data import spike_train_true, spike_train_predicted
-
 sns.set_theme()
+
+# ----------------------------------------------------------------------------------------------
+# Sample to implement the  function 
+
+# Create Simple Example of ground truth
+data_truth = [[0, 0, 0, 0, -1],
+              [0, 0, 0, -1, 0],
+              [1, 1, 0, 0, 0],
+              [1, 1, 0, 0, 0],
+              [0, 0, -1, 0.8, 0]]
+
+# Create a Simple Example of something connected incorrectly 
+data_predicted = [[0, 0, 1, 0, 0],
+                  [0, 0, 0, 1, -1],
+                  [1, 0, 0, 0, 0],
+                  [1, 0.5, 0, 0, 0],
+                  [0, 0, -0.8, 1, 0]]
+
+# Setup the Data frames
+label_1 = ["Output NeuronA", "Output NeuronB", "Output NeuronC", "Output NeuronD", "Output NeuronE"]
+label_2 = ["Input NeuronA", "Input NeuronB", "Input NeuronC", "Input NeuronD", "Input NeuronE"]
+structure_true_df = pd.DataFrame(data_truth, index = label_1, columns = label_2) 
+structure_predicted_df = pd.DataFrame(data_predicted, index = label_1, columns = label_2) 
+
+# Run the Function
+structure_prompts = structure_analysis(structure_true_df, structure_predicted_df)
+print(structure_prompts)
+
 
 # ----------------------------------------------------------------------------------------------
 # Import the first trial for 
